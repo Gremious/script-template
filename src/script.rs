@@ -3,6 +3,7 @@
 //! structopt = "0.3"
 //! log = "0.4"
 //! simple_logger = "1.11"
+//! anyhow = "1"
 //! ```
 
 #![warn(
@@ -13,6 +14,11 @@ clippy::pedantic,
 use std::{fs, path::PathBuf};
 use structopt::StructOpt;
 use simple_logger::SimpleLogger;
+use anyhow::{
+	Error,
+	Result,
+	bail
+};
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "basic")]
@@ -40,7 +46,7 @@ fn main() {
 	verbose!(opt, "output_dir {:#?}", &output);
 
 	fs::write(output, "Hello, world!").expect("Unable to write file");
-	println!("Hello, world!");
+	log::info!("Hello, world!");
 }
 
 #[macro_export]
