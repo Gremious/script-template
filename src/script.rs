@@ -37,7 +37,7 @@ fn main() {
 	verbose!(opt, "output: {:#?}", &input);
 
 	let output = fs::read_to_string(&opt.input).expect("Failed reading the output file.");
-	verbose!(opt, "output_dir {:#?}", output_dir);
+	verbose!(opt, "output_dir {:#?}", &output);
 
 	fs::write(output, "Hello, world!").expect("Unable to write file");
 	println!("Hello, world!");
