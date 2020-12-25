@@ -4,6 +4,7 @@
 //! log = "0.4"
 //! simple_logger = "1.11"
 //! anyhow = "1"
+//! lazy_static = "1"
 //! ```
 
 #![warn(
@@ -17,8 +18,16 @@ use simple_logger::SimpleLogger;
 use anyhow::{
 	Error,
 	Result,
-	bail
+	bail,
+	ensure
 };
+
+#[macro_use]
+extern crate lazy_static;
+
+lazy_static! {
+    static ref VERBOSE: RwLock<bool> = RwLock::new(false);
+}
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "basic")]
@@ -39,11 +48,13 @@ struct Opt {
 fn main() -> Result<()> {
 	SimpleLogger::new().init().unwrap();
 	let opt: Opt = Opt::from_args();
+	{ *VERBOSE.write().unwrap() = opt.verbose; }
+
 	let input = fs::read_to_string(&opt.input).expect("Failed reading the input file.");
-	verbose!(opt, "output: {:#?}", &input);
+	verbose!("output: {:#?}", &input);
 
 	let output = fs::read_to_string(&opt.input).expect("Failed reading the output file.");
-	verbose!(opt, "output_dir {:#?}", &output);
+	verbose!("output_dir {:#?}", &output);
 
 	fs::write(output, "Hello, world!").expect("Unable to write file");
 	log::info!("Hello, world!");
@@ -52,7 +63,7 @@ fn main() -> Result<()> {
 
 #[macro_export]
 macro_rules! verbose {
-    ($opt:ident, $target:literal, $($arg:tt)+) => {
-   		if $opt.verbose { log::info!($target, $($arg)+); }
+    ($target:literal, $($arg:tt)+) => {
+   		{ if *VERBOSE.read().unwrap() { log::info!($target, $($arg)+); } }
     };
 }
