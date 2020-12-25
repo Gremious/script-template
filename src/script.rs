@@ -46,8 +46,6 @@ fn main() {
 #[macro_export]
 macro_rules! verbose {
     ($opt:ident, $target:literal, $($arg:tt)+) => {
-    if $opt.verbose {
-            log::info!($target, $($arg)+);
-    }
+   		if $opt.verbose { log::info!($target, $($arg)+); }
     };
 }
