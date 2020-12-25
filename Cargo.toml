@@ -1,7 +1,9 @@
 [package]
-name = "script"
+name = "{{crate_name}}"
 version = "0.0.1"
-authors = ["gremious <gremious@protonmail.com>"]
+authors = ["{{authors}}"]
+description = "A `cargo generate` template for quick-starting a rust-script crate"
+keywords = ["template", "script"]
 edition = "2018"
 
 [[bin]]
