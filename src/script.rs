@@ -36,7 +36,7 @@ struct Opt {
 	output: PathBuf,
 }
 
-fn main() {
+fn main() -> Result<()> {
 	SimpleLogger::new().init().unwrap();
 	let opt: Opt = Opt::from_args();
 	let input = fs::read_to_string(&opt.input).expect("Failed reading the input file.");
@@ -47,6 +47,7 @@ fn main() {
 
 	fs::write(output, "Hello, world!").expect("Unable to write file");
 	log::info!("Hello, world!");
+	Ok(())
 }
 
 #[macro_export]
