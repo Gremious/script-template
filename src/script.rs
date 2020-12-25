@@ -10,7 +10,7 @@ clippy::all,
 clippy::pedantic,
 )]
 
-use std::{fs, path::PathBuf, env};
+use std::{fs, path::PathBuf};
 use structopt::StructOpt;
 use simple_logger::SimpleLogger;
 
@@ -27,19 +27,19 @@ struct Opt {
 
 	/// Output file.
 	#[structopt(name = "OUTPUT", parse(from_os_str))]
-	output: Option<PathBuf>,
+	output: PathBuf,
 }
 
 fn main() {
 	SimpleLogger::new().init().unwrap();
-	let opt = Opt::from_args();
+	let opt: Opt = Opt::from_args();
 	let input = fs::read_to_string(&opt.input).expect("Failed reading the input file.");
 	verbose!(opt, "output: {:#?}", &input);
 
-	let output_dir = if let Some(output_dir) = &opt.output { output_dir.clone() } else { opt.input.clone() };
+	let output = fs::read_to_string(&opt.input).expect("Failed reading the output file.");
 	verbose!(opt, "output_dir {:#?}", output_dir);
 
-	fs::write(output_dir, "Hello, world!").expect("Unable to write file");
+	fs::write(output, "Hello, world!").expect("Unable to write file");
 	println!("Hello, world!");
 }
 
